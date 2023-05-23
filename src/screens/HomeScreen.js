@@ -4,19 +4,21 @@ import { FAB } from "react-native-paper";
 import { useAuth } from "../AuthContext";
 import WebsiteMonitorCard from "../components/WebsiteMonitorCard";
 import WebsiteMonitorForm from "../components/WebsiteMonitorForm";
-import { getEntries } from "../services/ApiService";
+import { deleteEntry, getEntries } from "../services/ApiService";
 
 const HomeScreen = () => {
   const { access_token } = useAuth();
   const [entries, setEntries] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
+  const [isEdit, setEdit] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState(null);
 
   const fetchData = async () => {
     try {
-      console.log(access_token);
+      // console.log(access_token);
       const data = await getEntries(access_token);
-      console.log(data);
+      // console.log(data);
       setEntries(data);
     } catch (error) {
       console.error("Error fetching entries:", error);
@@ -35,10 +37,23 @@ const HomeScreen = () => {
 
   const handleAddButtonPress = () => {
     setFormVisible(true);
+    setSelectedEntry(null);
+    setEdit(false);
   };
 
   const handleFormDismiss = () => {
     setFormVisible(false);
+    handleRefresh();
+  };
+
+  const handleEditButtonPress = (entry) => {
+    setSelectedEntry(entry);
+    setEdit(true);
+    setFormVisible(true);
+  };
+
+  const handleDeleteButtonPress = async (entry) => {
+    await deleteEntry(entry.RowKey, access_token);
     handleRefresh();
   };
 
@@ -51,7 +66,12 @@ const HomeScreen = () => {
         }
       >
         {entries.map((entry) => (
-          <WebsiteMonitorCard key={entry.RowKey} entry={entry} />
+          <WebsiteMonitorCard
+            key={entry.RowKey}
+            entry={entry}
+            onEdit={handleEditButtonPress}
+            onDelete={handleDeleteButtonPress}
+          />
         ))}
       </ScrollView>
       <FAB
@@ -63,6 +83,8 @@ const HomeScreen = () => {
       <WebsiteMonitorForm
         visible={isFormVisible}
         onDismiss={handleFormDismiss}
+        initialEntry={selectedEntry}
+        isEdit={isEdit}
       />
     </>
   );

@@ -13,7 +13,6 @@ export const getEntries = async (access_token) => {
     const apiUrl = `${BACKEND_BASE_URL}/website-monitor`;
     const headers = getHeaders(access_token);
     const response = await axios.get(apiUrl, { headers });
-    console.log("response.data");
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
@@ -84,10 +83,9 @@ export const deleteEntry = async (RowKey, access_token) => {
   const headers = getHeaders(access_token);
 
   try {
-    const response = await axios.delete(apiUrl, null, {
+    const response = await axios.delete(apiUrl, {
       headers: headers,
     });
-    console.log("Response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error:", error.message);
@@ -100,7 +98,7 @@ export const toggleEntry = async (RowKey, access_token) => {
   const headers = getHeaders(access_token);
 
   try {
-    const response = await axios.post(apiUrl, null, {
+    const response = await axios.put(apiUrl, null, {
       headers: headers,
     });
     console.log("Response:", response.data);

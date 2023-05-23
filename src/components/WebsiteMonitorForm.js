@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Button, Dialog, Menu, Portal, TextInput } from "react-native-paper";
 import { useAuth } from "../AuthContext";
-import { addEntry } from "../services/ApiService";
+import { addEntry, updateEntry } from "../services/ApiService";
 
-const WebsiteMonitorForm = ({ visible, onDismiss, isEdit }) => {
+const WebsiteMonitorForm = ({ visible, onDismiss, isEdit, initialEntry }) => {
+  const [RowKey, setRowKey] = useState("");
   const [url, setUrl] = useState("");
   const [xPath, setXPath] = useState("");
   const [searchString, setSearchString] = useState("");
@@ -14,29 +15,37 @@ const WebsiteMonitorForm = ({ visible, onDismiss, isEdit }) => {
 
   const scrapeIntervalValues = [1, 5, 15, 30, 60, 240, 720, 1440];
 
+  useEffect(() => {
+    if (initialEntry) {
+      setRowKey(initialEntry.RowKey);
+      setUrl(initialEntry.url);
+      setXPath(initialEntry.xpath);
+      setSearchString(initialEntry.search_string);
+      setScrapeInterval(initialEntry.scrape_interval);
+    } else {
+      setUrl("");
+      setXPath("");
+      setSearchString("");
+      setScrapeInterval(1);
+    }
+  }, [initialEntry]);
+
   const handleSave = async () => {
     if (isEdit) {
-      // Placeholder logic for editing the form data
-      //   console.log("Editing form data:", {
-      //     url,
-      //     xPath,
-      //     searchString,
-      //     scrapeInterval,
-      //   });
       // Make PUT API request with updated data
+      await updateEntry(
+        RowKey,
+        url,
+        xPath,
+        searchString,
+        scrapeInterval,
+        access_token
+      );
     } else {
-      // Placeholder logic for adding new form data
-      //   console.log("Adding new form data:", {
-      //     url,
-      //     xPath,
-      //     searchString,
-      //     scrapeInterval,
-      //     access_token
-      //   });
       // Make POST API request with new data
       await addEntry(url, xPath, searchString, scrapeInterval, access_token);
     }
-    // Clear form data
+    // Clear saved form data
     setUrl("");
     setXPath("");
     setSearchString("");
@@ -45,13 +54,6 @@ const WebsiteMonitorForm = ({ visible, onDismiss, isEdit }) => {
   };
 
   const handleCancel = () => {
-    // Placeholder logic for cancelling the form
-    console.log("Form cancelled");
-    // Clear form data
-    // setUrl("");
-    // setXPath("");
-    // setSearchString("");
-    // setScrapeInterval(1);
     onDismiss();
   };
 

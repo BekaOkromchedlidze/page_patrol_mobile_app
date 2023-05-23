@@ -4,6 +4,14 @@ import { Card, IconButton, Text } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const WebsiteMonitorCard = ({ entry, onEdit, onDelete }) => {
+  const handleEdit = () => {
+    onEdit(entry);
+  };
+
+  const handleDelete = () => {
+    onDelete(entry);
+  };
+
   return (
     <Card style={styles.card}>
       <Card.Content>
@@ -17,14 +25,14 @@ const WebsiteMonitorCard = ({ entry, onEdit, onDelete }) => {
           icon={({ color, size }) => (
             <MaterialCommunityIcons name="pencil" color={color} size={size} />
           )}
-          onPress={onEdit}
+          onPress={handleEdit}
         />
         <IconButton
           icon={({ color, size }) => (
             <MaterialCommunityIcons name="close" color={color} size={size} />
           )}
           color="red"
-          onPress={onDelete}
+          onPress={handleDelete}
         />
       </Card.Actions>
     </Card>
