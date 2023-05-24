@@ -1,15 +1,20 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Card, IconButton, Text } from "react-native-paper";
+import { Card, IconButton, Switch, Text } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const WebsiteMonitorCard = ({ entry, onEdit, onDelete }) => {
+const WebsiteMonitorCard = ({ entry, onEdit, onDelete, onSwitch }) => {
   const handleEdit = () => {
     onEdit(entry);
   };
 
   const handleDelete = () => {
     onDelete(entry);
+  };
+
+  const handleSwitch = () => {
+    onSwitch(entry);
+    console.log("Switch button pressed");
   };
 
   return (
@@ -21,6 +26,11 @@ const WebsiteMonitorCard = ({ entry, onEdit, onDelete }) => {
         <Text>Scrape Interval: {entry.scrape_interval}</Text>
       </Card.Content>
       <Card.Actions style={styles.cardActions}>
+        <Switch
+          value={entry.is_enabled ? true : false}
+          onValueChange={handleSwitch}
+          style={styles.switchButton}
+        />
         <IconButton
           icon={({ color, size }) => (
             <MaterialCommunityIcons name="pencil" color={color} size={size} />
@@ -45,6 +55,12 @@ const styles = StyleSheet.create({
   },
   cardActions: {
     justifyContent: "flex-end",
+  },
+  switchButton: {
+    position: "absolute",
+    left: 0,
+    bottom: 8,
+    marginLeft: 10,
   },
 });
 

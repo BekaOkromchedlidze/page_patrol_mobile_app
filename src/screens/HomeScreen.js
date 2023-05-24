@@ -4,7 +4,7 @@ import { FAB } from "react-native-paper";
 import { useAuth } from "../AuthContext";
 import WebsiteMonitorCard from "../components/WebsiteMonitorCard";
 import WebsiteMonitorForm from "../components/WebsiteMonitorForm";
-import { deleteEntry, getEntries } from "../services/ApiService";
+import { deleteEntry, getEntries, toggleEntry } from "../services/ApiService";
 
 const HomeScreen = () => {
   const { access_token } = useAuth();
@@ -57,6 +57,11 @@ const HomeScreen = () => {
     handleRefresh();
   };
 
+  const handleSwitchButtonPress = async (entry) => {
+    await toggleEntry(entry.RowKey, access_token);
+    handleRefresh();
+  };
+
   return (
     <>
       <ScrollView
@@ -71,6 +76,7 @@ const HomeScreen = () => {
             entry={entry}
             onEdit={handleEditButtonPress}
             onDelete={handleDeleteButtonPress}
+            onSwitch={handleSwitchButtonPress}
           />
         ))}
       </ScrollView>
