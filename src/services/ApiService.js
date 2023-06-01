@@ -8,14 +8,21 @@ const getHeaders = (access_token) => {
   };
 };
 
+const logErrors = (error) => {
+  console.error("Error during API call:", error);
+  console.error("Error response data:", error.response.data);
+  console.error("Error response status:", error.response.status);
+  console.error("Error response headers:", error.response.headers);
+};
+
 export const getEntries = async (access_token) => {
   try {
-    const apiUrl = `${BACKEND_BASE_URL}/website-monitor`;
+    const apiUrl = `${BACKEND_BASE_URL}/page-patrol`;
     const headers = getHeaders(access_token);
     const response = await axios.get(apiUrl, { headers });
     return response.data;
   } catch (error) {
-    console.error("Error during API call:", error);
+    logErrors(error);
     throw error;
   }
 };
@@ -27,7 +34,7 @@ export const addEntry = async (
   scrape_interval,
   access_token
 ) => {
-  const apiUrl = `${BACKEND_BASE_URL}/website-monitor`;
+  const apiUrl = `${BACKEND_BASE_URL}/page-patrol`;
   const headers = getHeaders(access_token);
   const query = {
     url: url,
@@ -44,7 +51,7 @@ export const addEntry = async (
     console.log("Response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error:", error.message);
+    logErrors(error);
     throw error;
   }
 };
@@ -57,7 +64,7 @@ export const updateEntry = async (
   scrape_interval,
   access_token
 ) => {
-  const apiUrl = `${BACKEND_BASE_URL}/website-monitor/${RowKey}`;
+  const apiUrl = `${BACKEND_BASE_URL}/page-patrol/${RowKey}`;
   const headers = getHeaders(access_token);
   const query = {
     url: url,
@@ -73,13 +80,13 @@ export const updateEntry = async (
     console.log("Response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error:", error.message);
+    logErrors(error);
     throw error;
   }
 };
 
 export const deleteEntry = async (RowKey, access_token) => {
-  const apiUrl = `${BACKEND_BASE_URL}/website-monitor/${RowKey}`;
+  const apiUrl = `${BACKEND_BASE_URL}/page-patrol/${RowKey}`;
   const headers = getHeaders(access_token);
 
   try {
@@ -88,13 +95,13 @@ export const deleteEntry = async (RowKey, access_token) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error:", error.message);
+    logErrors(error);
     throw error;
   }
 };
 
-export const toggleEntry = async (RowKey, access_token) => {
-  const apiUrl = `${BACKEND_BASE_URL}/website-monitor/${RowKey}/toggle`;
+export const toggleEntry = async (page_patrol_id, access_token) => {
+  const apiUrl = `${BACKEND_BASE_URL}/page-patrol/${page_patrol_id}/toggle`;
   const headers = getHeaders(access_token);
 
   try {
@@ -104,7 +111,19 @@ export const toggleEntry = async (RowKey, access_token) => {
     console.log("Response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error:", error.message);
+    logErrors(error);
+    throw error;
+  }
+};
+
+export const getPatrolHistory = async (page_patrol_id, access_token) => {
+  try {
+    const apiUrl = `${BACKEND_BASE_URL}/page-patrol/${page_patrol_id}/history`;
+    const headers = getHeaders(access_token);
+    const response = await axios.get(apiUrl, { headers });
+    return response.data;
+  } catch (error) {
+    logErrors(error);
     throw error;
   }
 };

@@ -5,6 +5,7 @@ import { Provider } from "react-native-paper";
 import { AuthProvider } from "./src/AuthContext";
 import HomeScreen from "./src/screens/HomeScreen";
 import LoginScreen from "./src/screens/LoginScreen";
+import PatrolHistoryScreen from "./src/screens/PatrolHistoryScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,7 +17,10 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen name="Login Page" component={LoginScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
-            {/* Add other screens here */}
+            <Stack.Screen
+              name="Patrol History"
+              component={PatrolHistoryScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

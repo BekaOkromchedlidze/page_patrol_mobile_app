@@ -1,0 +1,105 @@
+import React, { useEffect, useState } from "react";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useAuth } from "../AuthContext";
+import PatrolHistoryCard from "../components/PatrolHistoryCard";
+import { getPatrolHistory } from "../services/ApiService";
+
+const PatrolHistoryScreen = ({ route }) => {
+  const { access_token } = useAuth();
+  const { page_patrol_id } = route.params;
+  const [patrol_history, setPatrolHistory] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const patrol_history = await getPatrolHistory(
+        page_patrol_id,
+        access_token
+      );
+      // console.log(data);
+      setPatrolHistory(patrol_history);
+    } catch (error) {
+      console.error("Error fetching entries:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [access_token]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  };
+
+  const handleViewButtonPress = () => {
+    // setSelectedEntry(null);
+  };
+
+  const handleFormDismiss = () => {
+    setFormVisible(false);
+    handleRefresh();
+  };
+
+  return (
+    <>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
+        {patrol_history.length === 0 ? (
+          <View style={styles.emptyContent}>
+            <Text style={styles.emptyText}>
+              There is no history for this Patrol
+            </Text>
+          </View>
+        ) : (
+          patrol_history.map((history_entity) => (
+            <PatrolHistoryCard
+              key={history_entity.scrape_time}
+              history_entity={history_entity}
+              onView={handleViewButtonPress}
+            />
+          ))
+        )}
+      </ScrollView>
+      {/* <WebsiteMonitorForm
+        visible={isFormVisible}
+        onDismiss={handleFormDismiss}
+        initialEntry={selectedEntry}
+        isEdit={isEdit}
+      /> */}
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    padding: 20,
+  },
+  emptyContainer: {
+    justifyContent: "center",
+    backgroundColor: "#F5F5F5",
+  },
+  emptyContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+});
+
+export default PatrolHistoryScreen;

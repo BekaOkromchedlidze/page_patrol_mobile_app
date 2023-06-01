@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, StyleSheet } from "react-native";
 import { FAB } from "react-native-paper";
@@ -8,6 +9,7 @@ import { deleteEntry, getEntries, toggleEntry } from "../services/ApiService";
 
 const HomeScreen = () => {
   const { access_token } = useAuth();
+  const navigation = useNavigation();
   const [entries, setEntries] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
   const [isEdit, setEdit] = useState(false);
@@ -62,6 +64,10 @@ const HomeScreen = () => {
     handleRefresh();
   };
 
+  const handleHistoryButtonPress = (page_patrol_id) => {
+    navigation.navigate("Patrol History", { page_patrol_id });
+  };
+
   return (
     <>
       <ScrollView
@@ -77,6 +83,7 @@ const HomeScreen = () => {
             onEdit={handleEditButtonPress}
             onDelete={handleDeleteButtonPress}
             onSwitch={handleSwitchButtonPress}
+            onHistory={handleHistoryButtonPress}
           />
         ))}
       </ScrollView>

@@ -3,7 +3,13 @@ import { StyleSheet } from "react-native";
 import { Card, IconButton, Switch, Text } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const WebsiteMonitorCard = ({ entry, onEdit, onDelete, onSwitch }) => {
+const WebsiteMonitorCard = ({
+  entry,
+  onEdit,
+  onDelete,
+  onSwitch,
+  onHistory,
+}) => {
   const handleEdit = () => {
     onEdit(entry);
   };
@@ -14,7 +20,10 @@ const WebsiteMonitorCard = ({ entry, onEdit, onDelete, onSwitch }) => {
 
   const handleSwitch = () => {
     onSwitch(entry);
-    console.log("Switch button pressed");
+  };
+
+  const handleHistory = () => {
+    onHistory(entry.RowKey);
   };
 
   return (
@@ -30,6 +39,12 @@ const WebsiteMonitorCard = ({ entry, onEdit, onDelete, onSwitch }) => {
           value={entry.is_enabled ? true : false}
           onValueChange={handleSwitch}
           style={styles.switchButton}
+        />
+        <IconButton
+          icon={({ color, size }) => (
+            <MaterialCommunityIcons name="history" color={color} size={size} />
+          )}
+          onPress={handleHistory}
         />
         <IconButton
           icon={({ color, size }) => (
