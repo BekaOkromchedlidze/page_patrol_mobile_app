@@ -5,8 +5,7 @@ import { Card, Text } from "react-native-paper";
 
 const PatrolHistoryCard = ({ history_entity, onView }) => {
   const handleView = () => {
-    onView(history_entity);
-    console.log("View button pressed");
+    onView(history_entity.scrape_html_content);
   };
 
   return (

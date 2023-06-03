@@ -26,6 +26,7 @@ const WebsiteMonitorCard = ({
     onHistory(entry.RowKey);
   };
 
+  // TODO: need to add feed back for xpaths not found
   return (
     <Card style={styles.card}>
       <Card.Content>

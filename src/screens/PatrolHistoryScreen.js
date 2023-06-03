@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import { useAuth } from "../AuthContext";
+import HTMLCard from "../components/HTMLCard";
 import PatrolHistoryCard from "../components/PatrolHistoryCard";
 import { getPatrolHistory } from "../services/ApiService";
 
@@ -15,6 +16,8 @@ const PatrolHistoryScreen = ({ route }) => {
   const { page_patrol_id } = route.params;
   const [patrol_history, setPatrolHistory] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isHTMLCardVisible, setHTMLCardVisible] = useState(false);
+  const [selectedHTMLContent, setSelectedHTMLContent] = useState("");
 
   const fetchData = async () => {
     try {
@@ -22,7 +25,6 @@ const PatrolHistoryScreen = ({ route }) => {
         page_patrol_id,
         access_token
       );
-      // console.log(data);
       setPatrolHistory(patrol_history);
     } catch (error) {
       console.error("Error fetching entries:", error);
@@ -39,13 +41,16 @@ const PatrolHistoryScreen = ({ route }) => {
     setRefreshing(false);
   };
 
-  const handleViewButtonPress = () => {
-    // setSelectedEntry(null);
+  const handleViewButtonPress = (htmlContent) => {
+    console.log("PRessed view");
+    setSelectedHTMLContent(htmlContent);
+    setHTMLCardVisible(true);
+    console.log(isHTMLCardVisible);
   };
 
-  const handleFormDismiss = () => {
-    setFormVisible(false);
-    handleRefresh();
+  const handleHTMLCardDismiss = () => {
+    console.log("dismiss!");
+    setHTMLCardVisible(false);
   };
 
   return (
@@ -72,12 +77,12 @@ const PatrolHistoryScreen = ({ route }) => {
           ))
         )}
       </ScrollView>
-      {/* <WebsiteMonitorForm
-        visible={isFormVisible}
-        onDismiss={handleFormDismiss}
-        initialEntry={selectedEntry}
-        isEdit={isEdit}
-      /> */}
+      <HTMLCard
+        visible={isHTMLCardVisible}
+        htmlContent={selectedHTMLContent}
+        onView={handleViewButtonPress}
+        onClose={handleHTMLCardDismiss}
+      />
     </>
   );
 };
