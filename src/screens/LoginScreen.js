@@ -1,4 +1,4 @@
-import { CLIENT_ID, TENANT_ID } from "@env";
+// import { CLIENT_ID, TENANT_ID } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import {
   ResponseType,
@@ -6,30 +6,31 @@ import {
   useAuthRequest,
   useAutoDiscovery,
 } from "expo-auth-session";
-import * as React from "react";
+import Constants from "expo-constants";
+import React, { useRef } from "react";
 import { Button, StyleSheet, View } from "react-native";
 import { useAuth } from "../AuthContext";
+import { updateExpoPushToken } from "../services/ApiService";
 
 export default function LoginScreen() {
-  const { setAuth } = useAuth();
+  const { setAuth, push_notification_token } = useAuth();
   const navigation = useNavigation();
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const redirectUri = makeRedirectUri({
-    scheme: "pagepatrol://",
+    scheme: "com.beka.pagepatrol",
     path: "auth",
   });
 
-  // const discovery = {
-  //   authorizationEndpoint: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize`,
-  //   tokenEndpoint: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`,
-  // };
   const discovery = useAutoDiscovery(
-    `https://login.microsoftonline.com/${TENANT_ID}/v2.0`
+    `https://login.microsoftonline.com/${Constants.expoConfig.extra.TENANT_ID}/v2.0`
   );
 
   const [request, response, promptAsync] = useAuthRequest(
     {
-      clientId: CLIENT_ID,
+      clientId: Constants.expoConfig.extra.CLIENT_ID,
+      // clientId: CLIENT_ID,
       responseType: ResponseType.Token,
       redirectUri,
       scopes: [
@@ -43,13 +44,18 @@ export default function LoginScreen() {
   );
 
   React.useEffect(() => {
-    if (response?.type === "success") {
-      const { access_token } = response.params;
-      // Save the access_token and perform necessary actions
-      setAuth(access_token);
-      // console.log(access_token);
-      navigation.navigate("Home");
-    }
+    const handleResponse = async () => {
+      if (response?.type === "success") {
+        const { access_token } = response.params;
+        setAuth(access_token);
+        //TODO: Add loading indicator when waiting for response from api
+        await updateExpoPushToken(access_token, push_notification_token);
+
+        navigation.navigate("Home");
+      }
+    };
+
+    handleResponse();
   }, [response]);
 
   return (

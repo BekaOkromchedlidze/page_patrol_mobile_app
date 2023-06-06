@@ -17,6 +17,9 @@
     "babel-plugin-dotenv-import": "^3.0.1",
     "expo": "^48.0.9",
     "expo-auth-session": "~4.0.3",
+    "expo-dev-client": "~2.2.1",
+    "expo-device": "^5.2.1",
+    "expo-notifications": "^0.18.1",
     "expo-status-bar": "~1.4.4",
     "moment": "^2.29.4",
     "react": "18.2.0",
@@ -28,5 +31,8 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.10"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "babel-plugin-transform-inline-environment-variables": "^0.4.4"
+  }
 }

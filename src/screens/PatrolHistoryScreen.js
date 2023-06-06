@@ -42,14 +42,11 @@ const PatrolHistoryScreen = ({ route }) => {
   };
 
   const handleViewButtonPress = (htmlContent) => {
-    console.log("PRessed view");
     setSelectedHTMLContent(htmlContent);
     setHTMLCardVisible(true);
-    console.log(isHTMLCardVisible);
   };
 
   const handleHTMLCardDismiss = () => {
-    console.log("dismiss!");
     setHTMLCardVisible(false);
   };
 

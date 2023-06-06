@@ -1,6 +1,8 @@
-import { BACKEND_BASE_URL } from "@env";
+// import { BACKEND_BASE_URL } from "@env";
 import axios from "axios";
+import Constants from "expo-constants";
 
+const BACKEND_BASE_URL = Constants.expoConfig.extra.BACKEND_BASE_URL;
 const getHeaders = (access_token) => {
   return {
     "Content-Type": "application/json",
@@ -8,6 +10,7 @@ const getHeaders = (access_token) => {
   };
 };
 
+//TODO: Use a logger instead
 const logErrors = (error) => {
   console.error("Error during API call:", error);
   console.error("Error response data:", error.response.data);
@@ -48,7 +51,6 @@ export const addEntry = async (
       headers: headers,
       params: query,
     });
-    console.log("Response:", response.data);
     return response.data;
   } catch (error) {
     logErrors(error);
@@ -77,7 +79,6 @@ export const updateEntry = async (
       headers: headers,
       params: query,
     });
-    console.log("Response:", response.data);
     return response.data;
   } catch (error) {
     logErrors(error);
@@ -108,7 +109,6 @@ export const toggleEntry = async (page_patrol_id, access_token) => {
     const response = await axios.put(apiUrl, null, {
       headers: headers,
     });
-    console.log("Response:", response.data);
     return response.data;
   } catch (error) {
     logErrors(error);
@@ -121,6 +121,28 @@ export const getPatrolHistory = async (page_patrol_id, access_token) => {
     const apiUrl = `${BACKEND_BASE_URL}/page-patrol/${page_patrol_id}/history`;
     const headers = getHeaders(access_token);
     const response = await axios.get(apiUrl, { headers });
+    return response.data;
+  } catch (error) {
+    logErrors(error);
+    throw error;
+  }
+};
+
+export const updateExpoPushToken = async (
+  access_token,
+  push_notification_token
+) => {
+  const apiUrl = `${BACKEND_BASE_URL}/page-patrol/update-push-token`;
+  const headers = getHeaders(access_token);
+  const query = {
+    expo_push_token: push_notification_token,
+  };
+
+  try {
+    const response = await axios.patch(apiUrl, null, {
+      headers: headers,
+      params: query,
+    });
     return response.data;
   } catch (error) {
     logErrors(error);
