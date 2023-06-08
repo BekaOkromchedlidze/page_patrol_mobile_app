@@ -44,3 +44,9 @@ jobs:
         run: BACKEND_BASE_URL=${{ secrets.BACKEND_BASE_URL }} eas build --profile preview --platform android --local
         env:
           BACKEND_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: PagePatrol.apk
+          path: ./*.apk
