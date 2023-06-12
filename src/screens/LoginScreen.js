@@ -1,4 +1,3 @@
-// import { CLIENT_ID, TENANT_ID } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import {
   ResponseType,
@@ -7,16 +6,20 @@ import {
   useAutoDiscovery,
 } from "expo-auth-session";
 import Constants from "expo-constants";
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { Button, StyleSheet, View } from "react-native";
-import { useAuth } from "../AuthContext";
+import { LoadingContext } from "..//contexts/LoadingContext";
+import log from "../Logger";
+import { useAuth } from "../contexts/AuthContext";
 import { updateExpoPushToken } from "../services/ApiService";
 
 export default function LoginScreen() {
+  // const { increaseLoading, decreaseLoading } = useLoadingContext();
   const { setAuth, push_notification_token } = useAuth();
   const navigation = useNavigation();
   const notificationListener = useRef();
   const responseListener = useRef();
+  const { dispatch } = useContext(LoadingContext);
 
   const redirectUri = makeRedirectUri({
     scheme: "com.beka.pagepatrol",
@@ -48,9 +51,12 @@ export default function LoginScreen() {
       if (response?.type === "success") {
         const { access_token } = response.params;
         setAuth(access_token);
-        //TODO: Add loading indicator when waiting for response from api
-        await updateExpoPushToken(access_token, push_notification_token);
 
+        await updateExpoPushToken(
+          access_token,
+          push_notification_token,
+          dispatch
+        );
         navigation.navigate("Home");
       }
     };
@@ -64,7 +70,15 @@ export default function LoginScreen() {
         disabled={!request}
         title="Login"
         onPress={() => {
-          promptAsync();
+          try {
+            dispatch({ type: "INCREMENT_LOADING" });
+            promptAsync();
+            dispatch({ type: "DECREMENT_LOADING" });
+          } catch (error) {
+            dispatch({ type: "DECREMENT_LOADING" });
+            log.error(`Error during ${endpoint} API call: `, error);
+            throw error;
+          }
         }}
       />
     </View>

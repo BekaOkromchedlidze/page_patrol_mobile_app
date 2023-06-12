@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RefreshControl, ScrollView, StyleSheet } from "react-native";
 import { FAB } from "react-native-paper";
-import { useAuth } from "../AuthContext";
 import WebsiteMonitorCard from "../components/WebsiteMonitorCard";
 import WebsiteMonitorForm from "../components/WebsiteMonitorForm";
+import { useAuth } from "../contexts/AuthContext";
+import { LoadingContext } from "../contexts/LoadingContext";
 import { deleteEntry, getEntries, toggleEntry } from "../services/ApiService";
 
 const HomeScreen = () => {
@@ -15,11 +16,12 @@ const HomeScreen = () => {
   const [isEdit, setEdit] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const { dispatch } = useContext(LoadingContext);
 
   const fetchData = async () => {
     try {
       // console.log(access_token);
-      const data = await getEntries(access_token);
+      const data = await getEntries(access_token, dispatch);
       // console.log(data);
       setEntries(data);
     } catch (error) {
@@ -55,12 +57,12 @@ const HomeScreen = () => {
   };
 
   const handleDeleteButtonPress = async (entry) => {
-    await deleteEntry(entry.RowKey, access_token);
+    await deleteEntry(entry.RowKey, access_token, dispatch);
     handleRefresh();
   };
 
   const handleSwitchButtonPress = async (entry) => {
-    await toggleEntry(entry.RowKey, access_token);
+    await toggleEntry(entry.RowKey, access_token, dispatch);
     handleRefresh();
   };
 

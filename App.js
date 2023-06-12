@@ -5,7 +5,9 @@ import * as Notifications from "expo-notifications";
 import React, { useEffect, useRef, useState } from "react";
 import { StatusBar } from "react-native";
 import { Provider } from "react-native-paper";
-import { AuthProvider, useAuth } from "./src/AuthContext";
+import LoadingIndicator from "./src/components/LoadingIndicator";
+import { AuthProvider, useAuth } from "./src/contexts/AuthContext";
+import { LoadingProvider } from "./src/contexts/LoadingContext";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import LoginScreen from "./src/screens/LoginScreen";
@@ -23,22 +25,25 @@ Notifications.setNotificationHandler({
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Provider>
-        <StatusBar barStyle="light-content" />
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Login Page" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen
-              name="Patrol History"
-              component={PatrolHistoryScreen}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-        <NotificationHandler />
-      </Provider>
-    </AuthProvider>
+    <LoadingProvider>
+      <AuthProvider>
+        <Provider>
+          <StatusBar barStyle="light-content" />
+          <LoadingIndicator />
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name="Login Page" component={LoginScreen} />
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen
+                name="Patrol History"
+                component={PatrolHistoryScreen}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+          <NotificationHandler />
+        </Provider>
+      </AuthProvider>
+    </LoadingProvider>
   );
 }
 

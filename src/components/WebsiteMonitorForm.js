@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Button, Dialog, Menu, Portal, TextInput } from "react-native-paper";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
+import { LoadingContext } from "../contexts/LoadingContext";
 import { addEntry, updateEntry } from "../services/ApiService";
 
 const WebsiteMonitorForm = ({ visible, onDismiss, isEdit, initialEntry }) => {
@@ -12,6 +13,7 @@ const WebsiteMonitorForm = ({ visible, onDismiss, isEdit, initialEntry }) => {
   const [scrapeInterval, setScrapeInterval] = useState(1);
   const [menuVisible, setMenuVisible] = useState(false);
   const { access_token } = useAuth();
+  const { dispatch } = useContext(LoadingContext);
 
   const scrapeIntervalValues = [1, 5, 15, 30, 60, 240, 720, 1440];
 
@@ -39,11 +41,19 @@ const WebsiteMonitorForm = ({ visible, onDismiss, isEdit, initialEntry }) => {
         xPath,
         searchString,
         scrapeInterval,
-        access_token
+        access_token,
+        dispatch
       );
     } else {
       // Make POST API request with new data
-      await addEntry(url, xPath, searchString, scrapeInterval, access_token);
+      await addEntry(
+        url,
+        xPath,
+        searchString,
+        scrapeInterval,
+        access_token,
+        dispatch
+      );
     }
     // Clear saved form data
     setUrl("");
