@@ -35,7 +35,6 @@ module.exports = {
     REDIRECT_URI: "https://auth.expo.io/@beeks246/PagePatrol",
     BACKEND_BASE_URL:
       process.env.BACKEND_BASE_URL ?? "http://192.168.1.223:8000",
-    // SECRET_TEST: process.env.SECRET_TEST ?? "secret_test_undefined",
     eas: {
       projectId: "7220d82d-abcc-4d6c-b737-c94bd12643ab",
     },
