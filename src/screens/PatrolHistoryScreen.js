@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   RefreshControl,
   ScrollView,
@@ -6,9 +6,10 @@ import {
   Text,
   View,
 } from "react-native";
-import { useAuth } from "../AuthContext";
 import HTMLCard from "../components/HTMLCard";
 import PatrolHistoryCard from "../components/PatrolHistoryCard";
+import { useAuth } from "../contexts/AuthContext";
+import { LoadingContext } from "../contexts/LoadingContext";
 import { getPatrolHistory } from "../services/ApiService";
 
 const PatrolHistoryScreen = ({ route }) => {
@@ -18,12 +19,14 @@ const PatrolHistoryScreen = ({ route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isHTMLCardVisible, setHTMLCardVisible] = useState(false);
   const [selectedHTMLContent, setSelectedHTMLContent] = useState("");
+  const { dispatch } = useContext(LoadingContext);
 
   const fetchData = async () => {
     try {
       const patrol_history = await getPatrolHistory(
         page_patrol_id,
-        access_token
+        access_token,
+        dispatch
       );
       setPatrolHistory(patrol_history);
     } catch (error) {

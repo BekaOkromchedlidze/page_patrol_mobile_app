@@ -10,7 +10,7 @@ module.exports = {
   splash: {
     image: "./assets/splash.png",
     resizeMode: "contain",
-    // backgroundColor: "#ffffff",
+    backgroundColor: "#ffffff",
   },
   assetBundlePatterns: ["**/*"],
   ios: {
@@ -20,7 +20,7 @@ module.exports = {
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
-      // backgroundColor: "#ffffff",
+      backgroundColor: "#ffffff",
     },
     package: "com.beka.pagepatrol",
     googleServicesFile: "./google-services.json",
