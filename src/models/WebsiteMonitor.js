@@ -1,4 +1,4 @@
-class WebsiteMonitorEntity {
+class PagePatrolEntity {
   constructor(id, url, interval, status) {
     this.id = id;
     this.url = url;
@@ -7,13 +7,8 @@ class WebsiteMonitorEntity {
   }
 
   static fromJson(json) {
-    return new WebsiteMonitorEntity(
-      json.id,
-      json.url,
-      json.interval,
-      json.status
-    );
+    return new PagePatrolEntity(json.id, json.url, json.interval, json.status);
   }
 }
 
-export default WebsiteMonitorEntity;
+export default PagePatrolEntity;

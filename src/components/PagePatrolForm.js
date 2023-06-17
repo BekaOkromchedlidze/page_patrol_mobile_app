@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { LoadingContext } from "../contexts/LoadingContext";
 import { addEntry, updateEntry } from "../services/ApiService";
 
-const WebsiteMonitorForm = ({ visible, onDismiss, isEdit, initialEntry }) => {
+const PagePatrolForm = ({ visible, onDismiss, isEdit, initialEntry }) => {
   const [RowKey, setRowKey] = useState("");
   const [url, setUrl] = useState("");
   const [xPath, setXPath] = useState("");
@@ -75,7 +75,7 @@ const WebsiteMonitorForm = ({ visible, onDismiss, isEdit, initialEntry }) => {
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>{isEdit ? "Edit" : "Add"} Website Monitor</Dialog.Title>
+        <Dialog.Title>{isEdit ? "Edit" : "Add"} PagePatrol</Dialog.Title>
         <Dialog.Content>
           <TextInput
             label="URL"
@@ -135,4 +135,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WebsiteMonitorForm;
+export default PagePatrolForm;

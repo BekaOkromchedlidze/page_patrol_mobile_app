@@ -3,13 +3,7 @@ import { StyleSheet } from "react-native";
 import { Card, IconButton, Switch, Text } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const WebsiteMonitorCard = ({
-  entry,
-  onEdit,
-  onDelete,
-  onSwitch,
-  onHistory,
-}) => {
+const PagePatrolCard = ({ entry, onEdit, onDelete, onSwitch, onHistory }) => {
   const handleEdit = () => {
     onEdit(entry);
   };
@@ -80,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WebsiteMonitorCard;
+export default PagePatrolCard;

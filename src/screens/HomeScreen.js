@@ -2,8 +2,8 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { RefreshControl, ScrollView, StyleSheet } from "react-native";
 import { FAB } from "react-native-paper";
-import WebsiteMonitorCard from "../components/WebsiteMonitorCard";
-import WebsiteMonitorForm from "../components/WebsiteMonitorForm";
+import PagePatrolCard from "../components/PagePatrolCard";
+import PagePatrolForm from "../components/PagePatrolForm";
 import { useAuth } from "../contexts/AuthContext";
 import { LoadingContext } from "../contexts/LoadingContext";
 import { deleteEntry, getEntries, toggleEntry } from "../services/ApiService";
@@ -79,7 +79,7 @@ const HomeScreen = () => {
         }
       >
         {entries.map((entry) => (
-          <WebsiteMonitorCard
+          <PagePatrolCard
             key={entry.RowKey}
             entry={entry}
             onEdit={handleEditButtonPress}
@@ -95,7 +95,7 @@ const HomeScreen = () => {
         color="white"
         onPress={handleAddButtonPress}
       />
-      <WebsiteMonitorForm
+      <PagePatrolForm
         visible={isFormVisible}
         onDismiss={handleFormDismiss}
         initialEntry={selectedEntry}
