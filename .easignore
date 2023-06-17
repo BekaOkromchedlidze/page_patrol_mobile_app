@@ -18,3 +18,4 @@ web-build/
 .env
 .vscode
 yarn.lock
+android/
